@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Tutorial.Models
+namespace TaleLearnCode.Todo.Domain
 {
+
 	public class Item
 	{
 
@@ -22,4 +19,5 @@ namespace Tutorial.Models
 		public bool Completed { get; set; }
 
 	}
+
 }

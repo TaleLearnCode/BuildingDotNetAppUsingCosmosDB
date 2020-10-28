@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Tutorial.Models;
+using TaleLearnCode.Todo.Domain;
 using Tutorial.Services;
 
 namespace Tutorial.Controllers
@@ -53,6 +53,19 @@ namespace Tutorial.Controllers
 				return RedirectToAction("Index");
 			}
 			return View(item);
+		}
+
+		[ActionName("Edit")]
+		public async Task<ActionResult> EditAsync(string id)
+		{
+
+			if (id == null) return BadRequest();
+
+			Item item = await _cosmosDbService.GetItemAsync(id);
+			if (item == null) return NotFound();
+
+			return View(item);
+
 		}
 
 		[ActionName("Deleted")]
