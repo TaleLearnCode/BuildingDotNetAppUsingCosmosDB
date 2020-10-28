@@ -1,0 +1,2 @@
+# BuildingDotNetAppUsingCosmosDB
+Are you looking to build an application that needs a data store with guaranteed single-digit millisecond response times with multi-master global distribution? Then Azure Cosmos DB is for you. In this presentation, you will learn what exactly Cosmos DB is, what it can be used for, how to access data stored in Cosmos using .NET, and some pitfalls you will want to avoid.
