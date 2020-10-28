@@ -2,24 +2,24 @@
 using System;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
-using Tutorial.Services;
+using TaleLearnCode.Todo.Services;
 
 namespace Tutorial.Controllers
 {
 	public class ItemController : Controller
 	{
 
-		private readonly ICosmosDbService _cosmosDbService;
+		private readonly ITodoService _todoService;
 
-		public ItemController(ICosmosDbService cosmosDbService)
+		public ItemController(ITodoService todoService)
 		{
-			_cosmosDbService = cosmosDbService;
+			_todoService = todoService;
 		}
 
 		[ActionName("Index")]
 		public async Task<IActionResult> IndexAsync()
 		{
-			return View(await _cosmosDbService.GetItemsAsync("SELECT * FROM c"));
+			return View(await _todoService.GetItemsAsync("SELECT * FROM c"));
 		}
 
 		[ActionName("Create")]
@@ -36,7 +36,7 @@ namespace Tutorial.Controllers
 			if (ModelState.IsValid)
 			{
 				item.Id = Guid.NewGuid().ToString();
-				await _cosmosDbService.AddItemAsync(item);
+				await _todoService.AddItemAsync(item);
 				return RedirectToAction("Index");
 			}
 			return View(item);
@@ -49,7 +49,7 @@ namespace Tutorial.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await _cosmosDbService.UpdateItemAsync(item.Id, item);
+				await _todoService.UpdateItemAsync(item.Id, item);
 				return RedirectToAction("Index");
 			}
 			return View(item);
@@ -61,7 +61,7 @@ namespace Tutorial.Controllers
 
 			if (id == null) return BadRequest();
 
-			Item item = await _cosmosDbService.GetItemAsync(id);
+			Item item = await _todoService.GetItemAsync(id);
 			if (item == null) return NotFound();
 
 			return View(item);
@@ -74,7 +74,7 @@ namespace Tutorial.Controllers
 
 			if (id == null) return BadRequest();
 
-			Item item = await _cosmosDbService.GetItemAsync(id);
+			Item item = await _todoService.GetItemAsync(id);
 			if (item == null) return NotFound();
 
 			return View(item);
@@ -86,14 +86,14 @@ namespace Tutorial.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteConfirmedAsync([Bind("id")] string id)
 		{
-			await _cosmosDbService.DeleteItemAsync(id);
+			await _todoService.DeleteItemAsync(id);
 			return RedirectToAction("Index");
 		}
 
 		[ActionName("Details")]
 		public async Task<ActionResult> DetailsAsync(string id)
 		{
-			return View(await _cosmosDbService.GetItemAsync(id));
+			return View(await _todoService.GetItemAsync(id));
 		}
 
 	}

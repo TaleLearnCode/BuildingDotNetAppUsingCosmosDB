@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
-using Tutorial.Models;
 
-namespace Tutorial.Services
+namespace TaleLearnCode.Todo.Services
 {
-	public interface ICosmosDbService
+	public interface ITodoService
 	{
 		Task AddItemAsync(Item item);
 		Task DeleteItemAsync(string id);

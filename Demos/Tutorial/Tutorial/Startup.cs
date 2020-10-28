@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
-using Tutorial.Services;
+using TaleLearnCode.Todo.Services;
 
 namespace Tutorial
 {
@@ -24,7 +24,7 @@ namespace Tutorial
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
-			services.AddSingleton<ICosmosDbService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+			services.AddSingleton<ITodoService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +55,7 @@ namespace Tutorial
 			});
 		}
 
-		private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+		private static async Task<TodoService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
 		{
 
 			string databaseName = configurationSection.GetSection("DatabaseName").Value;
@@ -64,7 +64,7 @@ namespace Tutorial
 			string key = configurationSection.GetSection("Key").Value;
 
 			CosmosClient cosmosClient = new CosmosClient(account, key);
-			CosmosDbService cosmosDbService = new CosmosDbService(cosmosClient, databaseName, containerName);
+			TodoService cosmosDbService = new TodoService(cosmosClient, databaseName, containerName);
 
 			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
 			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/id");

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
 
-namespace Tutorial.Services
+namespace TaleLearnCode.Todo.Services
 {
 
-	public class CosmosDbService : ICosmosDbService
+	public class TodoService : ITodoService
 	{
 
 		private Container _container;
 
-		public CosmosDbService(CosmosClient cosmosClient, string databaseName, string containerName)
+		public TodoService(CosmosClient cosmosClient, string databaseName, string containerName)
 		{
 			_container = cosmosClient.GetContainer(databaseName, containerName);
 		}
@@ -56,6 +56,7 @@ namespace Tutorial.Services
 		{
 			await _container.UpsertItemAsync<Item>(item, new PartitionKey(id));
 		}
+
 
 	}
 
