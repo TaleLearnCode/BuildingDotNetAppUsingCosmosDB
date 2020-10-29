@@ -9,7 +9,7 @@ namespace TaleLearnCode.Todo.Services
 		Task AddItemAsync(Item item);
 		Task DeleteItemAsync(string id);
 		Task<Item> GetItemAsync(string id);
-		Task<IEnumerable<Item>> GetItemsAsync(string queryString);
+		Task<IEnumerable<Item>> GetItemsAsync();
 		Task UpdateItemAsync(string id, Item item);
 	}
 }

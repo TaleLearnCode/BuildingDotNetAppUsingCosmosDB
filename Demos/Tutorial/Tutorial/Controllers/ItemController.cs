@@ -19,7 +19,7 @@ namespace Tutorial.Controllers
 		[ActionName("Index")]
 		public async Task<IActionResult> IndexAsync()
 		{
-			return View(await _todoService.GetItemsAsync("SELECT * FROM c"));
+			return View(await _todoService.GetItemsAsync());
 		}
 
 		[ActionName("Create")]
@@ -68,7 +68,7 @@ namespace Tutorial.Controllers
 
 		}
 
-		[ActionName("Deleted")]
+		[ActionName("Delete")]
 		public async Task<ActionResult> DeleteAsync(string id)
 		{
 
