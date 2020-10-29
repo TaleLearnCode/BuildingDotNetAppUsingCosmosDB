@@ -67,7 +67,7 @@ namespace Tutorial
 			TodoService cosmosDbService = new TodoService(cosmosClient, databaseName, containerName);
 
 			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
-			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/userId");
 
 			return cosmosDbService;
 		}

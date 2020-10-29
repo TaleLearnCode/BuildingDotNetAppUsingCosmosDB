@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
 
@@ -19,22 +18,24 @@ namespace TaleLearnCode.Todo.Services
 
 		public async Task AddItemAsync(Item item)
 		{
-			await Common.CreateItemAsync<Item>(_container, item, item.Id);
+			await Common.CreateItemAsync(_container, item, item.UserId);
 		}
 
-		public async Task DeleteItemAsync(string id)
+		public async Task DeleteItemAsync(string id, string userId)
 		{
-			await Common.DeleteItemAsync<Item>(_container, id, id);
+			await Common.DeleteItemAsync<Item>(_container, id, userId);
 		}
 
-		public async Task<Item> GetItemAsync(string id)
+		public async Task<Item> GetItemAsync(string id, string userId)
 		{
-			return await Common.GetItemAsync<Item>(_container, id, id);
+			return await Common.GetItemAsync<Item>(_container, id, userId);
 		}
 
-		public async Task<IEnumerable<Item>> GetItemsAsync()
+		public async Task<IEnumerable<Item>> GetItemsAsync(string userId)
 		{
-			return await ExecuteQueryAsync(new QueryDefinition("SELECT * FROM c"));
+			return await ExecuteQueryAsync(
+				new QueryDefinition("SELECT * FROM c WHERE c.userId = @UserId")
+					.WithParameter("@UserId", userId));
 		}
 
 		public async Task<IEnumerable<Item>> ExecuteQueryAsync(QueryDefinition queryDefinition)
@@ -42,9 +43,9 @@ namespace TaleLearnCode.Todo.Services
 			return await Common.ExecuteQueryAsync<Item>(_container, queryDefinition);
 		}
 
-		public async Task UpdateItemAsync(string id, Item item)
+		public async Task UpdateItemAsync(Item item)
 		{
-			await _container.UpsertItemAsync<Item>(item, new PartitionKey(id));
+			await _container.UpsertItemAsync(item, new PartitionKey(item.UserId));
 		}
 
 	}

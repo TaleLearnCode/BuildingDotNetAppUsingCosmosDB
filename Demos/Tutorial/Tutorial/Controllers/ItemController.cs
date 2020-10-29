@@ -9,6 +9,9 @@ namespace Tutorial.Controllers
 	public class ItemController : Controller
 	{
 
+		// HACK: This should be replaced with an actual user identifier
+		private readonly string _userId = "6F9BD7D9-6336-4EF6-97BA-99F9ABFBC15E";
+
 		private readonly ITodoService _todoService;
 
 		public ItemController(ITodoService todoService)
@@ -19,7 +22,7 @@ namespace Tutorial.Controllers
 		[ActionName("Index")]
 		public async Task<IActionResult> IndexAsync()
 		{
-			return View(await _todoService.GetItemsAsync());
+			return View(await _todoService.GetItemsAsync(_userId));
 		}
 
 		[ActionName("Create")]
@@ -36,6 +39,7 @@ namespace Tutorial.Controllers
 			if (ModelState.IsValid)
 			{
 				item.Id = Guid.NewGuid().ToString();
+				item.UserId = _userId;
 				await _todoService.AddItemAsync(item);
 				return RedirectToAction("Index");
 			}
@@ -49,7 +53,8 @@ namespace Tutorial.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await _todoService.UpdateItemAsync(item.Id, item);
+				item.UserId = _userId;
+				await _todoService.UpdateItemAsync(item);
 				return RedirectToAction("Index");
 			}
 			return View(item);
@@ -61,7 +66,7 @@ namespace Tutorial.Controllers
 
 			if (id == null) return BadRequest();
 
-			Item item = await _todoService.GetItemAsync(id);
+			Item item = await _todoService.GetItemAsync(id, _userId);
 			if (item == null) return NotFound();
 
 			return View(item);
@@ -74,7 +79,7 @@ namespace Tutorial.Controllers
 
 			if (id == null) return BadRequest();
 
-			Item item = await _todoService.GetItemAsync(id);
+			Item item = await _todoService.GetItemAsync(id, _userId);
 			if (item == null) return NotFound();
 
 			return View(item);
@@ -86,14 +91,14 @@ namespace Tutorial.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteConfirmedAsync([Bind("id")] string id)
 		{
-			await _todoService.DeleteItemAsync(id);
+			await _todoService.DeleteItemAsync(id, _userId);
 			return RedirectToAction("Index");
 		}
 
 		[ActionName("Details")]
 		public async Task<ActionResult> DetailsAsync(string id)
 		{
-			return View(await _todoService.GetItemAsync(id));
+			return View(await _todoService.GetItemAsync(id, _userId));
 		}
 
 	}

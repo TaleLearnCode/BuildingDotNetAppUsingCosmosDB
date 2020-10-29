@@ -7,9 +7,9 @@ namespace TaleLearnCode.Todo.Services
 	public interface ITodoService
 	{
 		Task AddItemAsync(Item item);
-		Task DeleteItemAsync(string id);
-		Task<Item> GetItemAsync(string id);
-		Task<IEnumerable<Item>> GetItemsAsync();
-		Task UpdateItemAsync(string id, Item item);
+		Task DeleteItemAsync(string id, string userId);
+		Task<Item> GetItemAsync(string id, string userId);
+		Task<IEnumerable<Item>> GetItemsAsync(string userId);
+		Task UpdateItemAsync(Item item);
 	}
 }

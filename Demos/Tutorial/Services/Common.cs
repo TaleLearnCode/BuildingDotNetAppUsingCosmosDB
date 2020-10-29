@@ -25,7 +25,7 @@ namespace TaleLearnCode.Todo.Services
 		{
 			try
 			{
-				ItemResponse<T> response = await container.ReadItemAsync<T>(id, new PartitionKey(id));
+				ItemResponse<T> response = await container.ReadItemAsync<T>(id, new PartitionKey(partitionKey));
 				return response.Resource;
 			}
 			catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
