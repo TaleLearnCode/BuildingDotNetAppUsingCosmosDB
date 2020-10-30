@@ -21,6 +21,11 @@ namespace TaleLearnCode.Todo.Domain
 		[JsonProperty(PropertyName = "isComplete")]
 		public bool Completed { get; set; }
 
+		[JsonProperty(PropertyName = "status")]
+		public ItemStatus ItemStatus { get; set; } = new ItemStatus("New");
+
+		public string ItemStatusName { get; set; }
+
 	}
 
 }

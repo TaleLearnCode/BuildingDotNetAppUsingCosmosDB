@@ -25,6 +25,7 @@ namespace Tutorial
 		{
 			services.AddControllersWithViews();
 			services.AddSingleton<ITodoService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+			services.AddSingleton<IMetadataService>(InitializeMetadataServiceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +72,25 @@ namespace Tutorial
 
 			return cosmosDbService;
 		}
+
+		// TODO: Encapsulate
+		private static async Task<MetadataService> InitializeMetadataServiceAsync(IConfigurationSection configurationSection)
+		{
+
+			string databaseName = configurationSection.GetSection("DatabaseName").Value;
+			string containerName = configurationSection.GetSection("MetadataContainer").Value;
+			string account = configurationSection.GetSection("Account").Value;
+			string key = configurationSection.GetSection("Key").Value;
+
+			CosmosClient cosmosClient = new CosmosClient(account, key);
+			MetadataService cosmosDbService = new MetadataService(cosmosClient, databaseName, containerName);
+
+			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
+			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/type");
+
+			return cosmosDbService;
+		}
+
 
 	}
 

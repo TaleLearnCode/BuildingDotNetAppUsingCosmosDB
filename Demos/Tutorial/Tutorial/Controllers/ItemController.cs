@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
 using TaleLearnCode.Todo.Services;
+using Tutorial.Models;
 
 namespace Tutorial.Controllers
 {
@@ -13,10 +14,12 @@ namespace Tutorial.Controllers
 		private readonly string _userId = "6F9BD7D9-6336-4EF6-97BA-99F9ABFBC15E";
 
 		private readonly ITodoService _todoService;
+		private readonly IMetadataService _metadataService;
 
-		public ItemController(ITodoService todoService)
+		public ItemController(ITodoService todoService, IMetadataService metadataService)
 		{
 			_todoService = todoService;
+			_metadataService = metadataService;
 		}
 
 		[ActionName("Index")]
@@ -49,10 +52,11 @@ namespace Tutorial.Controllers
 		[HttpPost]
 		[ActionName("Edit")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditAsync([Bind("Id,Name,Description,Completed")] Item item)
+		public async Task<ActionResult> EditAsync([Bind("Id,Name,Description,Completed,ItemStatus")] Item item)
 		{
 			if (ModelState.IsValid)
 			{
+				//await TryUpdateModelAsync(item);
 				item.UserId = _userId;
 				await _todoService.UpdateItemAsync(item);
 				return RedirectToAction("Index");
@@ -69,7 +73,14 @@ namespace Tutorial.Controllers
 			Item item = await _todoService.GetItemAsync(id, _userId);
 			if (item == null) return NotFound();
 
-			return View(item);
+			var viewModel = new ItemModel()
+			{
+				Item = item,
+				ItemStatuses = await _metadataService.GetMetadataAsync<ItemStatus>()
+			};
+
+
+			return View(viewModel);
 
 		}
 

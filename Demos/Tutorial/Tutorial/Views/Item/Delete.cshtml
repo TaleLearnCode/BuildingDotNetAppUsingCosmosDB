@@ -1,47 +1,57 @@
 ﻿@model TaleLearnCode.Todo.Domain.Item
 
 @{
-    ViewBag.Title = "Delete";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewBag.Title = "Delete";
+        Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Delete a To-Do Item</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+  <hr />
+  <dl class="dl-horizontal">
+    <dt>
+      @Html.DisplayNameFor(model => model.Name)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+    <dd>
+      @Html.DisplayFor(model => model.Name)
+    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+    <dt>
+      @Html.DisplayNameFor(model => model.Description)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+    <dd>
+      @Html.DisplayFor(model => model.Description)
+    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Completed)
-        </dt>
+    <dt>
+      @Html.DisplayNameFor(model => model.ItemStatus)
+    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Completed)
-        </dd>
-    </dl>
+    <dd>
+      @Html.DisplayFor(model => model.ItemStatus)
+    </dd>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+    <dt>
+      @Html.DisplayNameFor(model => model.Completed)
+    </dt>
+
+    <dd>
+      @Html.DisplayFor(model => model.Completed)
+    </dd>
+  </dl>
+
+  @using (Html.BeginForm())
+        {
+  @Html.AntiForgeryToken()
+
+  <div class="form-actions no-color">
+    <input type="submit" value="Delete" class="btn btn-default" /> |
+    @Html.ActionLink("Back to List", "Index")
+  </div>
+  }
 </div>
