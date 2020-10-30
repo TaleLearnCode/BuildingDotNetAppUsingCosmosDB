@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30626.31
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tutorial", "Tutorial\Tutorial.csproj", "{0776D534-37EE-4BE5-8980-60A8740E5BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{21186DDF-0CBA-41C8-B52E-AAC65A8F433B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{21186DDF-0CBA-41C8-B52E-AAC65A8F433B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{96A3BDAD-8C75-4B12-87AA-E26993D4E052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{96A3BDAD-8C75-4B12-87AA-E26993D4E052}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoBuilder", "DemoBuilder\DemoBuilder.csproj", "{42D6B5F1-6B7F-4F35-93D5-E09EDF728E30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoBuilder", "DemoBuilder\DemoBuilder.csproj", "{42D6B5F1-6B7F-4F35-93D5-E09EDF728E30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
 using TaleLearnCode.Todo.Services;
@@ -56,8 +59,10 @@ namespace Tutorial.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				//await TryUpdateModelAsync(item);
 				item.UserId = _userId;
+				item.ItemStatus.Name = 
+					(await _metadataService.GetMetadataFromCacheAsync<ItemStatus>()).ToList()
+					.Where(s => s.Id == item.ItemStatus.Id).First().Name;
 				await _todoService.UpdateItemAsync(item);
 				return RedirectToAction("Index");
 			}
@@ -76,7 +81,7 @@ namespace Tutorial.Controllers
 			var viewModel = new ItemModel()
 			{
 				Item = item,
-				ItemStatuses = await _metadataService.GetMetadataAsync<ItemStatus>()
+				ItemStatuses = await _metadataService.GetMetadataFromCacheAsync<ItemStatus>()
 			};
 
 

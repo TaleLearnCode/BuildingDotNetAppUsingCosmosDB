@@ -24,8 +24,12 @@ namespace Tutorial
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
-			services.AddSingleton<ITodoService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-			services.AddSingleton<IMetadataService>(InitializeMetadataServiceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+			services.AddSingleton<ITodoService>(
+				InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+			services.AddSingleton<IMetadataService>(
+				InitializeMetadataServiceAsync(
+					Configuration.GetSection("CosmosDb"),
+					Configuration.GetSection("AzureCache")).GetAwaiter().GetResult());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,16 +69,17 @@ namespace Tutorial
 			string key = configurationSection.GetSection("Key").Value;
 
 			CosmosClient cosmosClient = new CosmosClient(account, key);
-			TodoService cosmosDbService = new TodoService(cosmosClient, databaseName, containerName);
 
 			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
 			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/userId");
 
-			return cosmosDbService;
+			TodoService todoService = new TodoService(cosmosClient, databaseName, containerName);
+
+			return todoService;
 		}
 
 		// TODO: Encapsulate
-		private static async Task<MetadataService> InitializeMetadataServiceAsync(IConfigurationSection configurationSection)
+		private static async Task<MetadataService> InitializeMetadataServiceAsync(IConfigurationSection configurationSection, IConfigurationSection azureCacheConfigurationSession)
 		{
 
 			string databaseName = configurationSection.GetSection("DatabaseName").Value;
@@ -82,13 +87,17 @@ namespace Tutorial
 			string account = configurationSection.GetSection("Account").Value;
 			string key = configurationSection.GetSection("Key").Value;
 
+			string azureCacheConnectionString = azureCacheConfigurationSession.GetSection("ConnectionString").Value;
+
 			CosmosClient cosmosClient = new CosmosClient(account, key);
-			MetadataService cosmosDbService = new MetadataService(cosmosClient, databaseName, containerName);
 
 			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
 			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/type");
 
-			return cosmosDbService;
+			MetadataService metadataService = new MetadataService(cosmosClient, databaseName, containerName, azureCacheConnectionString);
+
+			return metadataService;
+
 		}
 
 
