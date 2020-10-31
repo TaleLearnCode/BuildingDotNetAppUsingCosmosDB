@@ -39,6 +39,7 @@ namespace TaleLearnCode.Todo.Services
 			return await ExecuteQueryAsync<T>(container, new QueryDefinition(queryString));
 		}
 
+		// TODO: Look at IAsyncEnumable<T>
 		internal static async Task<IEnumerable<T>> ExecuteQueryAsync<T>(Container container, QueryDefinition queryDefinition)
 		{
 			var query = container.GetItemQueryIterator<T>(queryDefinition);

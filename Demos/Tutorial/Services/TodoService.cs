@@ -48,6 +48,13 @@ namespace TaleLearnCode.Todo.Services
 			await _container.UpsertItemAsync(item, new PartitionKey(item.UserId));
 		}
 
+		public async Task<IEnumerable<Item>> GetItemsOfStatusAsync(string itemStatusId)
+		{
+			return await ExecuteQueryAsync(
+				new QueryDefinition("SELECT * FROM c WHERE c.itemStatus.id = @ItemStatusId")
+				.WithParameter("@ItemStatusId", itemStatusId));
+		}
+
 	}
 
 }
