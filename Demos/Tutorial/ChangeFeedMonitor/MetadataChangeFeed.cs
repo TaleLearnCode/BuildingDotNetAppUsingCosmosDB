@@ -10,19 +10,19 @@ using TaleLearnCode.Todo.Services;
 
 namespace TaleLearnCode.Todo.Functions
 {
-	public class Metadata
+	public class MetadataChangeFeed
 	{
 
 		private readonly ITodoService _todoService;
 
-		public Metadata(ITodoService todoService)
+		public MetadataChangeFeed(ITodoService todoService)
 		{
 
 			if (todoService is null) throw new ArgumentNullException(nameof(todoService));
 			_todoService = todoService;
 		}
 
-		[FunctionName("MetadataV1")]
+		[FunctionName("MetadataChangeFeed")]
 		public async Task Run([CosmosDBTrigger(
 			databaseName: Settings.DatabaseName,
 			collectionName: Settings.MetadataContainerName,
@@ -36,23 +36,28 @@ namespace TaleLearnCode.Todo.Functions
 				foreach (var document in documents)
 				{
 
-					var metadata = JsonConvert.DeserializeObject<Domain.Metadata>(document.ToString());
+					var settings = new JsonSerializerSettings();
+					settings.Converters.Add(new MetadataConverter());
+					var metadata = JsonConvert.DeserializeObject<IMetadata>(document.ToString(), settings);
 
-					if (metadata.Type == MetadataTypes.ItemStatus)
-					{
-						var itemStatus = JsonConvert.DeserializeObject<ItemStatus>(document.ToString());
-						var itemsToUpdate = await _todoService.GetItemsOfStatusAsync(itemStatus.Id);
-						foreach (var itemToUpdate in itemsToUpdate)
-						{
-							itemToUpdate.ItemStatus = itemStatus;
-							await _todoService.UpdateItemAsync(itemToUpdate);
-							log.LogWarning($"Updated Item {itemToUpdate.Id}");
-						}
-					}
+					if (metadata.GetType() == typeof(ItemStatus))
+						await ProcessItemStatusAsync((ItemStatus)metadata, log);
 
 				}
 
 			}
+		}
+
+		private async Task ProcessItemStatusAsync(ItemStatus itemStatus, ILogger log)
+		{
+			var itemsToUpdate = await _todoService.GetItemsOfStatusAsync(itemStatus.Id);
+			foreach (var itemToUpdate in itemsToUpdate)
+			{
+				itemToUpdate.ItemStatus = itemStatus;
+				await _todoService.UpdateItemAsync(itemToUpdate);
+				log.LogWarning($"Updated Item {itemToUpdate.Id}");
+			}
+
 		}
 
 	}

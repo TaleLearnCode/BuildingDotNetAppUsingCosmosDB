@@ -4,7 +4,7 @@ using System;
 namespace TaleLearnCode.Todo.Domain
 {
 
-	public class Metadata : IMetadata
+	public abstract class Metadata : IMetadata
 	{
 
 		[JsonProperty(PropertyName = "id")]
@@ -26,8 +26,6 @@ namespace TaleLearnCode.Todo.Domain
 					throw new Exception("Invalid metadata type");
 			}
 		}
-
-		public Metadata() { }
 
 		protected Metadata(string type)
 		{
