@@ -9,5 +9,6 @@ namespace TaleLearnCode.Todo.Services
 		Task<T> CreateMetadataAsync<T>(T metadata) where T : IMetadata;
 		Task<IEnumerable<T>> GetMetadataAsync<T>() where T : IMetadata, new();
 		Task<IEnumerable<T>> GetMetadataFromCacheAsync<T>() where T : IMetadata, new();
+		void ClearMetadataTypeFromCache<T>() where T : IMetadata;
 	}
 }

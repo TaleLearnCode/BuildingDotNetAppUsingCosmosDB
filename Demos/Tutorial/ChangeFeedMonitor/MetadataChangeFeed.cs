@@ -14,12 +14,14 @@ namespace TaleLearnCode.Todo.Functions
 	{
 
 		private readonly ITodoService _todoService;
+		private readonly IMetadataService _metadataService;
 
-		public MetadataChangeFeed(ITodoService todoService)
+		public MetadataChangeFeed(ITodoService todoService, IMetadataService metadataService)
 		{
-
 			if (todoService is null) throw new ArgumentNullException(nameof(todoService));
+			if (metadataService is null) throw new ArgumentNullException(nameof(metadataService));
 			_todoService = todoService;
+			_metadataService = metadataService;
 		}
 
 		[FunctionName("MetadataChangeFeed")]
@@ -50,6 +52,7 @@ namespace TaleLearnCode.Todo.Functions
 
 		private async Task ProcessItemStatusAsync(ItemStatus itemStatus, ILogger log)
 		{
+			_metadataService.ClearMetadataTypeFromCache<ItemStatus>();
 			var itemsToUpdate = await _todoService.GetItemsOfStatusAsync(itemStatus.Id);
 			foreach (var itemToUpdate in itemsToUpdate)
 			{

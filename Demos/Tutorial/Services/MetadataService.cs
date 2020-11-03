@@ -61,6 +61,13 @@ namespace TaleLearnCode.Todo.Services
 			return JsonConvert.DeserializeObject<IEnumerable<T>>(cache.StringGet(metadataTypeName));
 		}
 
+		public void ClearMetadataTypeFromCache<T>() where T : IMetadata
+		{
+			if (_redisConnection is null) throw new Exception("The Redis connection must be configured before trying to read from Redis.");
+			IDatabase cache = _redisConnection.Value.GetDatabase();
+			cache.KeyDelete(Metadata.GetMetadataTypeNameByType(typeof(T)));
+		}
+
 	}
 
 }

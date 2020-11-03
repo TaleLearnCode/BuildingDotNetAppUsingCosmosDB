@@ -8,6 +8,7 @@
 
 		public ItemStatus(string name) : base(MetadataTypes.ItemStatus)
 		{
+			Id = name;
 			Name = name;
 		}
 
