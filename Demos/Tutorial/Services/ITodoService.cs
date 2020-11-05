@@ -12,5 +12,6 @@ namespace TaleLearnCode.Todo.Services
 		Task<IEnumerable<Item>> GetItemsAsync(string userId);
 		Task UpdateItemAsync(Item item);
 		Task<IEnumerable<Item>> GetItemsOfStatusAsync(string itemStatusId);
+		Task ArchiveItemAsync(Item item);
 	}
 }

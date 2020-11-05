@@ -15,7 +15,17 @@ namespace TaleLearnCode.Todo.Functions
 		{
 			CosmosClient cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosConnectionString"));
 			builder.Services.AddSingleton<IMetadataService>((s) => { return new MetadataService(cosmosClient, Settings.DatabaseName, Settings.MetadataContainerName, Environment.GetEnvironmentVariable("AzureCacheConnectionString")); });
-			builder.Services.AddSingleton<ITodoService>((s) => { return new TodoService(cosmosClient, Settings.DatabaseName, Settings.ItemContainerName); });
+			builder.Services.AddSingleton<ITodoService>(
+				(s) =>
+				{
+					return new TodoService(
+						cosmosClient,
+						Settings.DatabaseName,
+						Settings.ItemContainerName,
+						Environment.GetEnvironmentVariable("ArchiveStorageAccount"),
+						Environment.GetEnvironmentVariable("ArchiveStorageKey"),
+						Environment.GetEnvironmentVariable("ArchiveContainer"));
+				});
 		}
 
 	}

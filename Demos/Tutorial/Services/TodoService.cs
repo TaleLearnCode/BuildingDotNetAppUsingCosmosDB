@@ -1,5 +1,10 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using TaleLearnCode.Todo.Domain;
 
@@ -9,11 +14,29 @@ namespace TaleLearnCode.Todo.Services
 	public class TodoService : ITodoService
 	{
 
-		private Container _container;
+		private readonly Container _container;
+		private readonly CloudBlobContainer _blobContainer;
 
-		public TodoService(CosmosClient cosmosClient, string databaseName, string containerName)
+		public TodoService(
+			CosmosClient cosmosClient,
+			string databaseName,
+			string containerName,
+			string storageAccountName,
+			string storageAccountKey,
+			string blobContainerName)
 		{
 			_container = cosmosClient.GetContainer(databaseName, containerName);
+
+			var storageAccount = new CloudStorageAccount(
+				new StorageCredentials(
+					storageAccountName,
+					storageAccountKey),
+				useHttps: true);
+
+			var blobClient = storageAccount.CreateCloudBlobClient();
+
+			_blobContainer = blobClient.GetContainerReference(blobContainerName);
+
 		}
 
 		public async Task AddItemAsync(Item item)
@@ -53,6 +76,14 @@ namespace TaleLearnCode.Todo.Services
 			return await ExecuteQueryAsync(
 				new QueryDefinition("SELECT * FROM c WHERE c.itemStatus.id = @ItemStatusId")
 				.WithParameter("@ItemStatusId", itemStatusId));
+		}
+
+		public async Task ArchiveItemAsync(Item item)
+		{
+			var blobName = $"{item.UserId}-{item.ItemStatus.Name}-{item.Id}";
+			var blob = _blobContainer.GetBlockBlobReference(blobName);
+			var bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(item));
+			await blob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
 		}
 
 	}

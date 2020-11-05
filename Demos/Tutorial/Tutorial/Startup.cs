@@ -24,8 +24,15 @@ namespace Tutorial
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+			//services.AddSingleton<ITodoService>(InitializeCosmosClientInstanceAsync(//		Configuration.GetSection("CosmosDb"),
+			//		Configuration.GetSection("ArchiveStorage")).GetAwaiter().GetResult();
+
+
 			services.AddSingleton<ITodoService>(
-				InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+				InitializeCosmosClientInstanceAsync(
+					Configuration.GetSection("CosmosDb"),
+					Configuration.GetSection("ArchiveStorage")).GetAwaiter().GetResult());
+
 			services.AddSingleton<IMetadataService>(
 				InitializeMetadataServiceAsync(
 					Configuration.GetSection("CosmosDb"),
@@ -60,7 +67,7 @@ namespace Tutorial
 			});
 		}
 
-		private static async Task<TodoService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+		private static async Task<TodoService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection, IConfigurationSection archiveConfiguration)
 		{
 
 			string databaseName = configurationSection.GetSection("DatabaseName").Value;
@@ -73,7 +80,13 @@ namespace Tutorial
 			DatabaseResponse databaseResponse = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
 			await databaseResponse.Database.CreateContainerIfNotExistsAsync(containerName, "/userId");
 
-			TodoService todoService = new TodoService(cosmosClient, databaseName, containerName);
+			TodoService todoService = new TodoService(
+				cosmosClient,
+				databaseName,
+				containerName,
+				archiveConfiguration.GetSection("AccountName").Value,
+				archiveConfiguration.GetSection("AccountKey").Value,
+				archiveConfiguration.GetSection("ContainerName").Value);
 
 			return todoService;
 		}

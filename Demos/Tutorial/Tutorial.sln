@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoBuilder", "DemoBuilder\DemoBuilder.csproj", "{42D6B5F1-6B7F-4F35-93D5-E09EDF728E30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeFeedMonitor", "ChangeFeedMonitor\ChangeFeedMonitor.csproj", "{8B975AFC-A83B-4DE3-9248-68E562EAC663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChangeFeedMonitor", "ChangeFeedMonitor\ChangeFeedMonitor.csproj", "{8B975AFC-A83B-4DE3-9248-68E562EAC663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
