@@ -68,7 +68,7 @@ namespace TaleLearnCode.Todo.Services
 
 		public async Task UpdateItemAsync(Item item)
 		{
-			await _container.UpsertItemAsync(item, new PartitionKey(item.UserId));
+			await _container.ReplaceItemAsync(item, item.Id, new PartitionKey(item.UserId));
 		}
 
 		public async Task<IEnumerable<Item>> GetItemsOfStatusAsync(string itemStatusId)
