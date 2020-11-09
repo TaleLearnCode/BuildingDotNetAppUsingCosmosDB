@@ -9,6 +9,10 @@ using TaleLearnCode.Todo.Domain;
 namespace TaleLearnCode.Todo.Services
 {
 
+	/// <summary>
+	/// Provides services for working with metadata.
+	/// </summary>
+	/// <seealso cref="IMetadataService" />
 	public class MetadataService : IMetadataService
 	{
 
@@ -46,14 +50,14 @@ namespace TaleLearnCode.Todo.Services
 			return await Common.ExecuteQueryAsync<T>(
 				_cosmosContainer,
 				new QueryDefinition("SELECT * FROM c WHERE c.type = @Type")
-					.WithParameter("@Type", Metadata.GetMetadataTypeNameByType(typeof(T))));
+					.WithParameter("@Type", Metadata.GetMetadataTypeName(typeof(T))));
 		}
 
 		public async Task<IEnumerable<T>> GetMetadataFromCacheAsync<T>() where T : IMetadata, new()
 		{
 			if (_redisConnection is null) throw new Exception("The Redis connection must be configured before trying to read from Redis.");
 			IDatabase cache = _redisConnection.Value.GetDatabase();
-			var metadataTypeName = Metadata.GetMetadataTypeNameByType(typeof(T));
+			var metadataTypeName = Metadata.GetMetadataTypeName(typeof(T));
 			if (!cache.KeyExists(metadataTypeName))
 				cache.StringSet(
 					metadataTypeName,
@@ -65,7 +69,7 @@ namespace TaleLearnCode.Todo.Services
 		{
 			if (_redisConnection is null) throw new Exception("The Redis connection must be configured before trying to read from Redis.");
 			IDatabase cache = _redisConnection.Value.GetDatabase();
-			cache.KeyDelete(Metadata.GetMetadataTypeNameByType(typeof(T)));
+			cache.KeyDelete(Metadata.GetMetadataTypeName(typeof(T)));
 		}
 
 	}
