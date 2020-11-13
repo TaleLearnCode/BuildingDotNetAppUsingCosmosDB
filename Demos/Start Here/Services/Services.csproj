@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>TaleLearnCode.Todo.Services</AssemblyName>
+		<RootNamespace>TaleLearnCode.Todo.Services</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="C:\Users\chadg\.nuget\packages\microsoft.azure.cosmos\3.14.0\contentFiles\any\netstandard2.0\ThirdPartyNotice.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.14.0" />
+		<PackageReference Include="StackExchange.Redis" Version="2.1.58" />
+		<PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Domain\Domain.csproj" />
+	</ItemGroup>
+
+</Project>
