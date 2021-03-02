@@ -24,9 +24,10 @@ Are you looking to build an application that needs a data store with guaranteed 
 
 ## Learning Objectives
 * Understand how to use Azure Cosmos DB within a .NET Core application
-* Learn about th epitfalls to watch out for when using Azure Cosmos DB
+* Learn about the pitfalls to watch out for when using Azure Cosmos DB
 
 ## Presentations
 | Event | Location | Date | Time | Room | Downloads |
 |-----------|:-----------:|-----------:|-----------:|-----------:|-----------:|
+| Dallas & Austin Azure Meetup | Online (Dallas & Austin, TX) | March 16, 2021 | 6:00 pm CDT | N/A | Available After Presentation |
 | Tulsa .NET User Group | Online (Tulsa, OK) | November 9, 2020 | 6:15 pm CDT | N/A | [Slides](https://chadgreen.blob.core.windows.net/slides/Building%20a%20.NET%20Application%20Using%20Azure%20Cosmos%20DB%20-%20Tulsa%20.NET%20User%20Group.pdf)<br />[Demo Code](https://github.com/TaleLearnCode/BuildingDotNetAppUsingCosmosDB/tree/main/Demos/Tutorial) |
